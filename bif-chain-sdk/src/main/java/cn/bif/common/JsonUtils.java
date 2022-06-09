@@ -8,13 +8,12 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
-import lombok.extern.slf4j.Slf4j;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-@Slf4j
 public class JsonUtils {
     private static ObjectMapper mapper;
 
@@ -59,7 +58,7 @@ public class JsonUtils {
             }
             return mapper.writeValueAsString(obj);
         } catch (Throwable e) {
-            log.error(String.format("toJSONString %s", obj != null ? obj.toString() : "null"), e);
+            e.printStackTrace();
         }
         return defaultSupplier.get();
     }
@@ -80,7 +79,7 @@ public class JsonUtils {
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             return mapper.readValue(value, tClass);
         } catch (Throwable e) {
-            log.error(String.format("toJavaObject exception: \n %s\n %s", value, tClass), e);
+            e.printStackTrace();
         }
         return defaultSupplier.get();
     }
@@ -101,7 +100,7 @@ public class JsonUtils {
             JavaType javaType = mapper.getTypeFactory().constructParametricType(List.class, tClass);
             return mapper.readValue(value, javaType);
         } catch (Throwable e) {
-            log.error(String.format("toJavaObjectList exception \n%s\n%s", value, tClass), e);
+            e.printStackTrace();
         }
         return defaultSupplier.get();
     }
@@ -128,7 +127,7 @@ public class JsonUtils {
                 return (Map<String, Object>) value;
             }
         } catch (Exception e) {
-            log.info("fail to convert" + toJSONString(value), e);
+            e.printStackTrace();
         }
         return toMap(toJSONString(value), defaultSupplier);
     }
@@ -140,7 +139,7 @@ public class JsonUtils {
         try {
             return toJavaObject(value, LinkedHashMap.class);
         } catch (Exception e) {
-            log.error(String.format("toMap exception\n%s", value), e);
+            e.printStackTrace();
         }
         return defaultSupplier.get();
     }
@@ -161,7 +160,7 @@ public class JsonUtils {
         try {
             return toJavaObject(value, List.class);
         } catch (Exception e) {
-            log.error("toList exception\n" + value, e);
+            e.printStackTrace();
         }
         return defaultSuppler.get();
     }

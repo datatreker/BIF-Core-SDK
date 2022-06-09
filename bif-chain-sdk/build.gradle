@@ -1,0 +1,52 @@
+plugins {
+    id "java"
+    id "idea"
+    id 'java-library'
+    id "maven-publish"
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        url = uri('https://repo.maven.apache.org/maven2/')
+    }
+}
+
+dependencies {
+    implementation 'com.google.protobuf:protobuf-java:3.5.1'
+    implementation 'com.googlecode.protobuf-java-format:protobuf-java-format:1.4'
+    implementation 'net.i2p.crypto:eddsa:0.1.0'
+    implementation 'org.bitcoinj:bitcoinj-core:0.14.7'
+    implementation 'com.google.code.gson:gson:2.8.0'
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.69'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.10'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.10.7'
+    implementation 'org.apache.commons:commons-lang3:3.8.1'
+    implementation 'commons-collections:commons-collections:3.2.2'
+    implementation 'org.projectlombok:lombok:1.16.20'
+}
+
+group = 'bif.chain'
+version = '0.0.1-SNAPSHOT'
+description = 'bif-chain-sdk'
+java.sourceCompatibility = JavaVersion.VERSION_1_8
+
+publishing {
+    repositories {
+        maven {
+            url = version.contains('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            allowInsecureProtocol true
+            credentials {
+                username = repoUsername
+                password = repoPassword
+            }
+        }
+    }
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifactId = 'bif-chain-sdk'
+        }
+    }
+}
